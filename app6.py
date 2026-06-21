@@ -8,19 +8,25 @@ st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
-    .block-container {padding-top: 0.5rem; padding-bottom: 0rem;}
+    .block-container {padding-top: 1rem; padding-bottom: 0rem;}
     
-    /* Nasilna sila za eno vrstico */
+    /* Zagotovi, da stolpci stojijo drug ob drugem */
     [data-testid="column"] {
-        flex: 1 !important;
-        flex-direction: row !important;
-        display: flex !important;
-        align-items: center !important;
+        display: flex;
+        align-items: center;
     }
     
-    /* Odstranitev vseh marginov */
-    .stButton { margin: 0 !important; padding: 0 !important; }
-    h3 { margin: 0 !important; padding: 0 !important; }
+    /* Gumb potisni skrajno desno in odstrani margin */
+    div.stButton > button {
+        margin-left: auto;
+        display: block;
+    }
+    
+    /* Naslov levo */
+    h3 {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -38,15 +44,15 @@ if 'prikazana_slika' not in st.session_state:
 def izberi_novo():
     if url_seznama: st.session_state.prikazana_slika = random.choice(url_seznama)
 
-# Uporabimo manjši razpon za naslov, da ostane več prostora za gumb
-c1, c2 = st.columns([1, 2]) 
+# Vrstica z naslovom in gumbom
+c1, c2 = st.columns([1, 1])
 
 with c1:
     st.markdown("### Алфавит")
 
 with c2:
-    label = "Покажи" if st.session_state.prikazana_slika is None else "Следующая"
-    if st.button(label, use_container_width=True): # Dodan use_container_width
+    label = "Покажи карточку" if st.session_state.prikazana_slika is None else "Следующая"
+    if st.button(label):
         izberi_novo()
         st.rerun()
 
