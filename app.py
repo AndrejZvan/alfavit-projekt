@@ -1,17 +1,16 @@
 import streamlit as st
 import random
 
-# Nastavitev strani na "wide" in skritje menija
+# Kompaktna postavitev
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
-# CSS: Skrijemo zgornji meni in zmanjšamo vse odmike na nulo
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
-    .block-container {padding-top: 0rem; padding-bottom: 0rem; padding-left: 1rem; padding-right: 1rem;}
-    h1 {font-size: 1.5rem !important; margin-bottom: 0.5rem !important; text-align: center;}
-    .stImage {max-height: 60vh !important; display: flex; justify-content: center;}
+    .block-container {padding-top: 1rem; padding-bottom: 0rem;}
+    /* Naslov in gumbi v isti liniji */
+    .row-widget.stButton { margin-top: 0px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -29,16 +28,25 @@ if 'prikazana_slika' not in st.session_state:
 def izberi_novo():
     if url_seznama: st.session_state.prikazana_slika = random.choice(url_seznama)
 
-# Vsebina
-st.title("Алфавит")
+# Vodoravna postavitev: Gumb - Naslov - Gumb
+col1, col2, col3 = st.columns([1, 2, 1])
 
-if st.session_state.prikazana_slika is None:
-    if st.button("Покажи карточку"):
-        izberi_novo()
-        st.rerun()
-else:
-    # Slika je omejena na 60% višine zaslona, da ostane prostor za gumb
-    st.image(st.session_state.prikazana_slika)
-    if st.button("Следующая"):
-        izberi_novo()
-        st.rerun()
+with col1:
+    if st.session_state.prikazana_slika is None:
+        if st.button("Покажи"): # Malo krajše ime za prostor
+            izberi_novo()
+            st.rerun()
+    else:
+        if st.button("Следующая"):
+            izberi_novo()
+            st.rerun()
+
+with col2:
+    st.markdown("<h3 style='text-align: center; margin-top: 0px;'>Алфавит</h3>", unsafe_allow_html=True)
+
+with col3:
+    st.write("") # Prazno za ravnotežje
+
+# Slika spodaj
+if st.session_state.prikazana_slika is not None:
+    st.image(st.session_state.prikazana_slika, use_container_width=True)
