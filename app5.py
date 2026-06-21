@@ -9,24 +9,8 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     .block-container {padding-top: 1rem; padding-bottom: 0rem;}
-    
-    /* Zagotovi, da stolpci stojijo drug ob drugem */
-    [data-testid="column"] {
-        display: flex;
-        align-items: center;
-    }
-    
-    /* Gumb potisni skrajno desno in odstrani margin */
-    div.stButton > button {
-        margin-left: auto;
-        display: block;
-    }
-    
-    /* Naslov levo */
-    h3 {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+    /* Poravnavanje gumba na desno in naslova na levo */
+    .stButton {display: flex; justify-content: flex-end;}
     </style>
     """, unsafe_allow_html=True)
 
