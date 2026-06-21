@@ -1,16 +1,16 @@
 import streamlit as st
 import random
 
-# Kompaktna nastavitev
-st.set_page_config(layout="centered", initial_sidebar_state="collapsed")
+# Kompaktna postavitev
+st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     .block-container {padding-top: 1rem; padding-bottom: 0rem;}
-    /* Poravnavanje gumba na desno in naslova na levo */
-    .stButton {display: flex; justify-content: flex-end;}
+    /* Naslov in gumbi v isti liniji */
+    .row-widget.stButton { margin-top: 0px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -28,18 +28,25 @@ if 'prikazana_slika' not in st.session_state:
 def izberi_novo():
     if url_seznama: st.session_state.prikazana_slika = random.choice(url_seznama)
 
-# Vrstica z naslovom in gumbom
-c1, c2 = st.columns([1, 1])
+# Vodoravna postavitev: Gumb - Naslov - Gumb
+col1, col2, col3 = st.columns([1, 2, 1])
 
-with c1:
-    st.markdown("### Алфавит")
+with col1:
+    if st.session_state.prikazana_slika is None:
+        if st.button("Покажи"): # Malo krajše ime za prostor
+            izberi_novo()
+            st.rerun()
+    else:
+        if st.button("Следующая"):
+            izberi_novo()
+            st.rerun()
 
-with c2:
-    label = "Покажи карточку" if st.session_state.prikazana_slika is None else "Следующая"
-    if st.button(label):
-        izberi_novo()
-        st.rerun()
+with col2:
+    st.markdown("<h3 style='text-align: center; margin-top: 0px;'>Алфавит</h3>", unsafe_allow_html=True)
 
-# Slika - poravnana pod njima
+with col3:
+    st.write("") # Prazno za ravnotežje
+
+# Slika spodaj
 if st.session_state.prikazana_slika is not None:
     st.image(st.session_state.prikazana_slika, use_container_width=True)
