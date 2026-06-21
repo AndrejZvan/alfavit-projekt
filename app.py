@@ -1,31 +1,19 @@
 import streamlit as st
 import random
 
-# Kompaktna nastavitev
 st.set_page_config(layout="centered", initial_sidebar_state="collapsed")
 
+# CSS, ki ročno zgradi vodoravno vrstico
 st.markdown("""
     <style>
-    /* Popolnoma odstrani vse razmake okoli glavnega vsebnika */
-    .block-container { padding-top: 1rem; padding-bottom: 0rem; max-width: 100% !important; }
-    
-    /* Zagotovi, da se stolpci nikoli ne zložijo */
-    div[data-testid="column"] {
-        display: flex !important;
-        align-items: center !important;
-        width: auto !important;
-        flex: 0 0 auto !important;
+    .header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 10px;
     }
-    
-    /* Gumb naj bo čisto majhen, samo za besedilo */
-    .stButton > button {
-        padding: 2px 10px !important;
-        font-size: 0.8rem !important;
-        white-space: nowrap !important;
-    }
-    
-    /* Naslov naj bo majhen in levo */
-    h3 { margin: 0 !important; padding: 0 10px 0 0 !important; font-size: 1.2rem !important; }
+    h3 { margin: 0 !important; }
+    .stButton > button { margin: 0 !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -43,18 +31,17 @@ if 'prikazana_slika' not in st.session_state:
 def izberi_novo():
     if url_seznama: st.session_state.prikazana_slika = random.choice(url_seznama)
 
-# Uporabimo gap="small" in ročno nastavimo širino stolpcev
-c1, c2 = st.columns([1, 1], gap="small")
+# Zgradimo vrstico ročno s HTML
+label = "Покажи" if st.session_state.prikazana_slika is None else "Дальше"
 
-with c1:
-    st.markdown("### Алфавит")
+st.markdown('<div class="header-row">', unsafe_allow_html=True)
+st.markdown("### Алфавит")
+# Gumb damo v posebno formo, da bo deloval
+if st.button(label):
+    izberi_novo()
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
-with c2:
-    label = "Дальше" # Skrajšal sem besedilo, da bo zagotovo šlo v vrsto!
-    if st.button(label):
-        izberi_novo()
-        st.rerun()
-
-# Slika - poravnana pod njima
+# Slika
 if st.session_state.prikazana_slika is not None:
     st.image(st.session_state.prikazana_slika, use_container_width=True)
