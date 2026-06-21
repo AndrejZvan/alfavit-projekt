@@ -6,26 +6,21 @@ st.set_page_config(layout="centered", initial_sidebar_state="collapsed")
 
 st.markdown("""
     <style>
-    /* Popolnoma odstrani vse razmake okoli glavnega vsebnika */
-    .block-container { padding-top: 1rem; padding-bottom: 0rem; max-width: 100% !important; }
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    .block-container {padding-top: 0.5rem; padding-bottom: 0rem;}
     
-    /* Zagotovi, da se stolpci nikoli ne zložijo */
-    div[data-testid="column"] {
+    /* Nasilna sila za eno vrstico */
+    [data-testid="column"] {
+        flex: 1 !important;
+        flex-direction: row !important;
         display: flex !important;
         align-items: center !important;
-        width: auto !important;
-        flex: 0 0 auto !important;
     }
     
-    /* Gumb naj bo čisto majhen, samo za besedilo */
-    .stButton > button {
-        padding: 2px 10px !important;
-        font-size: 0.8rem !important;
-        white-space: nowrap !important;
-    }
-    
-    /* Naslov naj bo majhen in levo */
-    h3 { margin: 0 !important; padding: 0 10px 0 0 !important; font-size: 1.2rem !important; }
+    /* Odstranitev vseh marginov */
+    .stButton { margin: 0 !important; padding: 0 !important; }
+    h3 { margin: 0 !important; padding: 0 !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -43,15 +38,15 @@ if 'prikazana_slika' not in st.session_state:
 def izberi_novo():
     if url_seznama: st.session_state.prikazana_slika = random.choice(url_seznama)
 
-# Uporabimo gap="small" in ročno nastavimo širino stolpcev
-c1, c2 = st.columns([1, 1], gap="small")
+# Uporabimo manjši razpon za naslov, da ostane več prostora za gumb
+c1, c2 = st.columns([1, 2]) 
 
 with c1:
     st.markdown("### Алфавит")
 
 with c2:
-    label = "Дальше" # Skrajšal sem besedilo, da bo zagotovo šlo v vrsto!
-    if st.button(label):
+    label = "Покажи" if st.session_state.prikazana_slika is None else "Следующая"
+    if st.button(label, use_container_width=True): # Dodan use_container_width
         izberi_novo()
         st.rerun()
 
